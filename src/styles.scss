@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$poppins-font: "Poppins", sans-serif;
+$inter-font: "Inter", sans-serif;
+
+.social-icons__header {
+  position: relative; // Required for pseudo-elements
+
+  &::before,
+  &::after {
+    content: ""; // Required for pseudo-elements
+    position: absolute;
+    height: 1px; // Thickness of the line
+    width: 30%;
+    background-color: rgba(108, 115, 127, 0.2); // Color of the line
+    top: 50%; // Center vertically
+  }
+
+  &::before {
+    left: -5px; // Position before the text
+  }
+
+  &::after {
+    right: -5px; // Position after the text
+    width: 30%; // Length of the line after the text
+  }
+}
+
+.social-icon__style {
+  @apply w-16 h-16 border border-[#E0E0E9] cursor-pointer rounded-2xl flex items-center justify-center shadow-[0px_18.45px_30.75px_0px_#4461F21C];
+}
+
+.input-style {
+  @apply w-full bg-[#F9F9F9] block p-3.5 border border-gray-300 shadow-[0px_10px_20px_0px_#4461F20D] text-gray-900 placeholder:text-gray-500 text-sm rounded-[10px] focus:ring-blue-500 focus:border-blue-500;
+}
+
+.auth-main-btn {
+  @apply block w-full text-white bg-main p-3.5 rounded-[20px] font-poppins mb-4;
+}

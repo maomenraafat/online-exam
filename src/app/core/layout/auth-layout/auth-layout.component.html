@@ -1,0 +1,42 @@
+<div class="h-screen flex justify-center items-center">
+  <div class="hidden auth__left__section md:block">
+    <div class="w-[60%] mx-auto mt-10">
+      <h1 class="text-[3.125rem] font-bold mb-8">
+        Welcome to <span class="text-main text-6xl">Elevate</span>
+      </h1>
+      <p class="mb-10">
+        Quidem autem voluptatibus qui quaerat aspernatur architecto natus
+      </p>
+      <img src="images/bro.png" alt="Illustration" class="block mt-4" />
+    </div>
+  </div>
+  <div class="auth__right__section">
+    <nav class="w-full font-inter">
+      <ul class="flex gap-12 justify-center md:justify-end items-center">
+        <li class="">
+          <select class="border-none" name="lang" id="">
+            <option value="eng">English</option>
+            <option value="ar">Arabic</option>
+          </select>
+        </li>
+        <li class="text-main font-bold cursor-pointer">
+          <button>
+            <a class="whitespace-nowrap" [routerLink]="['/auth/login']"
+              >Sign in</a
+            >
+          </button>
+        </li>
+        <li>
+          <button
+            class="py-1 px-5 border rounded-[15px] text-[#4461F2] shadow-[0px_10px_30px_0px_#4461F20D]"
+          >
+            <a [routerLink]="['/auth']"> Register</a>
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div class="auth__containt">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

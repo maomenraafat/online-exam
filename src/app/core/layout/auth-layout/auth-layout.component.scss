@@ -1,0 +1,11 @@
+.auth__left__section {
+  @apply h-full w-1/2 p-8 bg-[#F0F4FC] rounded-br-[70px] rounded-tr-[70px] drop-shadow-2xl font-poppins;
+}
+
+.auth__right__section {
+  @apply flex flex-col justify-start h-full w-1/2 p-8;
+}
+
+.auth__containt {
+  @apply w-[60%] mx-auto flex-grow flex justify-center items-center;
+}

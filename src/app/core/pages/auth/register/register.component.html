@@ -1,0 +1,64 @@
+<div class="w-full mx-auto font-inter">
+  <h2 class="text-xl font-bold mb-8">Sign up</h2>
+  <form>
+    <div class="mb-7">
+      <app-custom-input
+        [id]="'first_name'"
+        [name]="'first_name'"
+        [placeholder]="'First Name'"
+        [type]="'text'"
+      ></app-custom-input>
+    </div>
+    <div class="mb-7">
+      <app-custom-input
+        [id]="'last_name'"
+        [name]="'last_name'"
+        [placeholder]="'Last Name'"
+        [type]="'text'"
+      ></app-custom-input>
+    </div>
+    <div class="mb-7">
+      <app-custom-input
+        [id]="'userEmail'"
+        [name]="'userEmail'"
+        [placeholder]="'Enter Email'"
+        [type]="'email'"
+      ></app-custom-input>
+    </div>
+    <div class="relative mb-7">
+      <app-custom-input
+        [id]="'userPassword'"
+        [name]="'userPassword'"
+        [placeholder]="'password'"
+        [type]="'password'"
+      ></app-custom-input>
+      <div
+        class="absolute bottom-0 top-0 right-0 flex items-center pr-3 cursor-pointer"
+      >
+        <i class="fa-regular fa-eye text-gray-500"></i>
+      </div>
+    </div>
+    <div class="relative mb-4">
+      <app-custom-input
+        [id]="'rePassword'"
+        [name]="'rePassword'"
+        [placeholder]="'Confirm password'"
+        [type]="'password'"
+      ></app-custom-input>
+      <div
+        class="absolute bottom-0 top-0 right-0 flex items-center pr-3 cursor-pointer"
+      >
+        <i class="fa-regular fa-eye text-gray-500"></i>
+      </div>
+    </div>
+    <button class="block mx-auto py-1 mb-9">
+      Already have an account?
+      <a [routerLink]="['/auth/login']" class="text-main font-poppins">
+        Login</a
+      >
+    </button>
+    <button class="auth-main-btn">Create Account</button>
+  </form>
+
+  <app-social-icons></app-social-icons>
+</div>

@@ -1,0 +1,38 @@
+<div class="w-full mx-auto font-inter">
+  <h2 class="text-xl font-bold mb-8">Sign in</h2>
+  <form>
+    <div class="mb-8">
+      <app-custom-input
+        [id]="'userEmail'"
+        [name]="'userEmail'"
+        [placeholder]="'Enter Email'"
+        [type]="'email'"
+      ></app-custom-input>
+    </div>
+    <div class="relative mb-4">
+      <app-custom-input
+        [id]="'userPassword'"
+        [name]="'userPassword'"
+        [placeholder]="'password'"
+        [type]="'password'"
+      ></app-custom-input>
+      <div
+        class="absolute bottom-0 top-0 right-0 flex items-center pr-3 cursor-pointer"
+      >
+        <i class="fa-regular fa-eye text-gray-500"></i>
+      </div>
+    </div>
+
+    <button class="block ms-auto">
+      <a
+        [routerLink]="['/auth/forget-password']"
+        class="text-main py-1 block mb-10 font-poppins"
+        >Recover Password ?</a
+      >
+    </button>
+
+    <button class="auth-main-btn">Sign in</button>
+  </form>
+
+  <app-social-icons></app-social-icons>
+</div>
