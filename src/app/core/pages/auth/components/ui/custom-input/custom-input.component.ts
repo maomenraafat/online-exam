@@ -1,9 +1,14 @@
+import { NgClass } from '@angular/common';
 import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-custom-input',
-  imports: [],
+  imports: [NgClass],
   templateUrl: './custom-input.component.html',
   styleUrl: './custom-input.component.scss',
   providers: [
@@ -15,6 +20,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class CustomInputComponent implements ControlValueAccessor {
+  @Input() inputControl!: AbstractControl | null;
+  @Input() inputClass!: string;
   @Input() type!: string;
   @Input() id!: string;
   @Input() name!: string;

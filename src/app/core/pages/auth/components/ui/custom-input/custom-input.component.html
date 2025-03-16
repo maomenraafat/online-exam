@@ -2,7 +2,13 @@
   [type]="type"
   [id]="id"
   [name]="name"
+  [class]="inputClass"
   class="input-style"
+  [ngClass]="
+    inputControl?.errors && inputControl?.touched
+      ? 'border-red-500'
+      : 'border-gray-300'
+  "
   [placeholder]="placeholder"
   [value]="value"
   (input)="onChange($any($event.target).value)"

@@ -37,7 +37,7 @@ $inter-font: "Inter", sans-serif;
 }
 
 .input-style {
-  @apply w-full bg-[#F9F9F9] block p-3.5 border border-gray-300 shadow-[0px_10px_20px_0px_#4461F20D] text-gray-900 placeholder:text-gray-500 text-sm rounded-[10px] focus:ring-blue-500 focus:border-blue-500;
+  @apply w-full bg-[#F9F9F9] block p-3.5 border  shadow-[0px_10px_20px_0px_#4461F20D] text-gray-900 placeholder:text-gray-500 text-sm rounded-[10px] focus:ring-blue-500 focus:border-blue-500;
 }
 
 .auth-main-btn {

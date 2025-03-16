@@ -1,0 +1,20 @@
+@if (inputControl?.errors && inputControl?.touched) {
+<div
+  class="flex px-2 mb-2 text-sm text-red-800 rounded-lg bg-red-50"
+  role="alert"
+>
+  <ul class="mt-1.5 list-disc list-inside">
+    @if(inputControl?.getError("required")){
+    <li>Input is required</li>
+    } @else if(inputControl?.getError("minlength")){
+    <li>Min character is 3</li>
+    } @else if(inputControl?.getError("maxlength")){
+    <li>Max character is 20</li>
+    } @else if(inputControl?.getError("email")){
+    <li>Invalid Email</li>
+    } @else if(inputControl?.getError("pattern")){
+    <li>Invalid Pattern</li>
+    }
+  </ul>
+</div>
+}

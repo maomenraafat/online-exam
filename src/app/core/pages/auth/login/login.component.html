@@ -1,26 +1,35 @@
 <div class="w-full mx-auto font-inter">
   <h2 class="text-xl font-bold mb-8">Sign in</h2>
-  <form>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="mb-8">
+      @let emailControl = loginForm.get("email");
       <app-custom-input
+        formControlName="email"
         [id]="'userEmail'"
         [name]="'userEmail'"
         [placeholder]="'Enter Email'"
         [type]="'email'"
+        [inputControl]="emailControl"
       ></app-custom-input>
     </div>
     <div class="relative mb-4">
+      @let passwordControl = loginForm.get("password");
       <app-custom-input
+        formControlName="password"
         [id]="'userPassword'"
         [name]="'userPassword'"
         [placeholder]="'password'"
-        [type]="'password'"
+        [type]="toggleInput ? 'password' : 'text'"
+        [inputControl]="passwordControl"
       ></app-custom-input>
-      <div
+      <span
         class="absolute bottom-0 top-0 right-0 flex items-center pr-3 cursor-pointer"
+        (click)="togglePassword()"
       >
-        <i class="fa-regular fa-eye text-gray-500"></i>
-      </div>
+        @if(toggleInput) {<i class="fa-regular fa-eye text-gray-500"></i>}@else{
+        <i class="fa-regular fa-eye-slash text-gray-500"></i>
+        }
+      </span>
     </div>
 
     <button class="block ms-auto">
