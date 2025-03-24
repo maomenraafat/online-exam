@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SocialIconsComponent } from '../components/ui/social-icons/social-icons.component';
 import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
@@ -10,6 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthApiService } from 'auth-api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -22,10 +23,11 @@ import { AuthApiService } from 'auth-api';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   togglePasswordInput: boolean = true;
   toggleRePasswordInput: boolean = true;
   registerForm!: FormGroup;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private _authApiService: AuthApiService,
@@ -90,15 +92,18 @@ export class RegisterComponent implements OnInit {
       this.registerForm.markAllAsTouched();
     } else {
       console.log(this.registerForm.value);
-      this._authApiService.register(this.registerForm.value).subscribe({
-        next: (res: any) => {
-          console.log(res);
-          this._router.navigate(['/auth/login']);
-        },
-        error: (err: any) => {
-          console.log(err);
-        },
-      });
+      this._authApiService
+        .register(this.registerForm.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: any) => {
+            console.log(res);
+            this._router.navigate(['/auth/login']);
+          },
+          error: (err: any) => {
+            console.log(err);
+          },
+        });
     }
   }
 
@@ -118,5 +123,9 @@ export class RegisterComponent implements OnInit {
 
   toggleRePassword() {
     this.toggleRePasswordInput = !this.toggleRePasswordInput;
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

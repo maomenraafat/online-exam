@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SocialIconsComponent } from '../components/ui/social-icons/social-icons.component';
 import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthApiService } from 'auth-api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-reset-password',
@@ -16,9 +17,9 @@ import { AuthApiService } from 'auth-api';
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
   resetPasswordForm!: FormGroup;
-
+  private readonly destroy$ = new Subject<void>();
   constructor(
     private _authApiService: AuthApiService,
     private _router: Router
@@ -47,6 +48,7 @@ export class ResetPasswordComponent implements OnInit {
       console.log(this.resetPasswordForm.value);
       this._authApiService
         .resetPassword(this.resetPasswordForm.value)
+        .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res) => {
             console.log(res);
@@ -57,5 +59,9 @@ export class ResetPasswordComponent implements OnInit {
           },
         });
     }
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

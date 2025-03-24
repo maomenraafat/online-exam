@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SocialIconsComponent } from '../components/ui/social-icons/social-icons.component';
-import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
 import {
   FormControl,
   FormGroup,
@@ -9,8 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthApiService } from 'auth-api';
-import { ErrorMessageComponent } from '../components/ui/error-message/error-message.component';
-
+import { Store } from '@ngrx/store';
+import { saveUser } from '../../../../store/auth.actions';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { authSelector } from '../../../../store/auth.selector';
+import { TokenData } from '../../../interfaces/tokenData';
+import { SocialIconsComponent } from '../components/ui/social-icons/social-icons.component';
+import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
+import { jwtDecode } from 'jwt-decode';
+import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-login',
   imports: [
@@ -22,11 +27,17 @@ import { ErrorMessageComponent } from '../components/ui/error-message/error-mess
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   toggleInput: boolean = true;
   loginForm!: FormGroup;
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private _authApiService: AuthApiService) {}
+  // userData$!: Observable<TokenData>;
+
+  constructor(
+    private _authApiService: AuthApiService,
+    private store: Store<{ auth: TokenData }>
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -49,18 +60,29 @@ export class LoginComponent implements OnInit {
       this.loginForm.markAllAsTouched();
     } else {
       console.log(this.loginForm.value);
-      this._authApiService.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          console.log(res);
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      this._authApiService
+        .login(this.loginForm.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            localStorage.setItem('userToken', res.token);
+            this.store.dispatch(saveUser({ value: jwtDecode(res.token) }));
+            // this.userData$ = this.store.select(authSelector);
+            // console.log(this.userData$);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
     }
   }
 
   togglePassword() {
     this.toggleInput = !this.toggleInput;
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

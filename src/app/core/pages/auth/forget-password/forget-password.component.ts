@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SocialIconsComponent } from '../components/ui/social-icons/social-icons.component';
 import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
@@ -9,6 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthApiService } from 'auth-api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-forget-password',
@@ -21,8 +22,9 @@ import { AuthApiService } from 'auth-api';
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.scss',
 })
-export class ForgetPasswordComponent implements OnInit {
+export class ForgetPasswordComponent implements OnInit, OnDestroy {
   forgetPasswordForm!: FormGroup;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private _authApiService: AuthApiService,
@@ -45,6 +47,7 @@ export class ForgetPasswordComponent implements OnInit {
       console.log(this.forgetPasswordForm.value);
       this._authApiService
         .forgetPassword(this.forgetPasswordForm.value)
+        .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res) => {
             console.log(res);
@@ -55,5 +58,10 @@ export class ForgetPasswordComponent implements OnInit {
           },
         });
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

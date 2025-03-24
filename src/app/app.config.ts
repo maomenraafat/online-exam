@@ -9,6 +9,8 @@ import {
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { BASE_URL_TOKEN } from 'auth-api';
 import { environment } from './environments/environments';
+import { provideStore } from '@ngrx/store';
+import { authReducer } from './store/auth.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +22,6 @@ export const appConfig: ApplicationConfig = {
       provide: BASE_URL_TOKEN,
       useValue: environment.baseUrl,
     },
+    provideStore({ auth: authReducer }),
   ],
 };
