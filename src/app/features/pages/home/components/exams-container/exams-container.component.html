@@ -1,0 +1,23 @@
+<div class="exam__container font-inter">
+  <p class="mb-6">Front-End Quiz</p>
+  @if (isLoading) {
+  <div class="text-center py-10">
+    <div
+      class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600 mb-4"
+    ></div>
+    <p>Loading Exams...</p>
+  </div>
+  } @else if (isError) {
+  <div class="text-center py-10 text-red-500">
+    Failed to load Exams.
+    <button (click)="getExamsByQuiz(quizId)" class="text-blue-600 ml-2">
+      Try again
+    </button>
+  </div>
+  } @for (exam of examsList; track $index) {
+  <app-exam-card
+    [exam]="exam"
+    (fireGetExamId)="getQuestionsByExam($event)"
+  ></app-exam-card>
+  }
+</div>

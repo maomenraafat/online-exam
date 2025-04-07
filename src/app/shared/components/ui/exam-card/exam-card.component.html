@@ -1,0 +1,25 @@
+<div class="flex justify-between bg-white rounded-[10px] py-4 px-6">
+  <div class="flex items-center gap-x-6">
+    <img src="images/Final Logo 1.png" alt="" />
+    <div>
+      <h3>{{ exam.title }}</h3>
+      <p class="text-[#535353]">{{ exam.numberOfQuestions }} Question</p>
+    </div>
+  </div>
+  <div class="flex flex-col justify-center items-center">
+    <span class="mb-2">{{ exam.duration }} Minutes</span>
+    <a
+      ><button
+        (click)="toggleModal()"
+        (click)="handleId(exam._id)"
+        class="font-medium text-[12px] bg-main text-white py-1 px-6 rounded-[10px]"
+      >
+        Start
+      </button></a
+    >
+  </div>
+</div>
+
+@if (showModal==true) {
+<app-modal (close)="showModal = false" (onStart)="handleStart()"></app-modal>
+}

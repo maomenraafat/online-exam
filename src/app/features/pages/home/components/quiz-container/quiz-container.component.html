@@ -1,0 +1,35 @@
+<section class="quizzes bg-white px-4 py-8 border rounded-[20px] mt-4">
+  <div
+    class="text-main font-medium text-2xl mb-6 flex justify-between items-center"
+  >
+    <span>Quizzes</span>
+    <button
+      (click)="getAllQuizzesData()"
+      class="text-blue-600 hover:text-blue-800"
+      [disabled]="isLoading"
+    >
+      View All
+    </button>
+  </div>
+  @if (isLoading) {
+  <div class="text-center py-10">
+    <div
+      class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600 mb-4"
+    ></div>
+    <p>Loading quizzes...</p>
+  </div>
+  } @else if (isError) {
+  <div class="text-center py-10 text-red-500">
+    Failed to load quizzes.
+    <button (click)="getAllQuizzes(quizzesLimit)" class="text-blue-600 ml-2">
+      Try again
+    </button>
+  </div>
+  } @else {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-6">
+    @for (quiz of quizzesList; track $index) {
+    <app-quiz-card [quiz]="quiz"></app-quiz-card>
+    }
+  </div>
+  }
+</section>
