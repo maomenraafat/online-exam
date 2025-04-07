@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SocialIconsComponent } from '../components/ui/social-icons/social-icons.component';
 import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { AuthApiService } from 'auth-api';
 import { Subject, takeUntil } from 'rxjs';
+import { CustomBtnComponent } from '../../../../shared/components/ui/custom-btn/custom-btn.component';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ import { Subject, takeUntil } from 'rxjs';
     SocialIconsComponent,
     CustomInputComponent,
     ReactiveFormsModule,
+    CustomBtnComponent,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -27,12 +29,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   togglePasswordInput: boolean = true;
   toggleRePasswordInput: boolean = true;
   registerForm!: FormGroup;
+  isLoading: boolean = false;
   private readonly destroy$ = new Subject<void>();
+  private readonly _authApiService = inject(AuthApiService);
+  private readonly _router = inject(Router);
 
-  constructor(
-    private _authApiService: AuthApiService,
-    private _router: Router
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.initForm();
@@ -88,9 +90,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   register() {
     console.log(this.registerForm);
 
-    if (this.registerForm.invalid) {
+    if (this.registerForm.invalid || this.isLoading) {
       this.registerForm.markAllAsTouched();
     } else {
+      this.isLoading = true;
       console.log(this.registerForm.value);
       this._authApiService
         .register(this.registerForm.value)
@@ -98,10 +101,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res: any) => {
             console.log(res);
+            this.isLoading = false;
             this._router.navigate(['/auth/login']);
           },
           error: (err: any) => {
             console.log(err);
+            this.isLoading = false;
           },
         });
     }

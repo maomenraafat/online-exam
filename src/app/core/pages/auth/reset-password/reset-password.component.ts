@@ -10,27 +10,40 @@ import {
 import { Router } from '@angular/router';
 import { AuthApiService } from 'auth-api';
 import { Subject, takeUntil } from 'rxjs';
+import { CustomBtnComponent } from '../../../../shared/components/ui/custom-btn/custom-btn.component';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [SocialIconsComponent, CustomInputComponent, ReactiveFormsModule],
+  imports: [
+    SocialIconsComponent,
+    CustomInputComponent,
+    ReactiveFormsModule,
+    CustomBtnComponent,
+  ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
 })
 export class ResetPasswordComponent implements OnInit, OnDestroy {
   resetPasswordForm!: FormGroup;
+  togglePasswordInput: boolean = true;
+  toggleRePasswordInput: boolean = true;
+  isLoading: boolean = false;
   private readonly destroy$ = new Subject<void>();
-  constructor(
-    private _authApiService: AuthApiService,
-    private _router: Router
-  ) {}
+  private readonly _authApiService = inject(AuthApiService);
+  private readonly _router = inject(Router);
+  constructor() {}
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm(): void {
     this.resetPasswordForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        ),
+      ]),
       newPassword: new FormControl(null, [
         Validators.required,
         Validators.pattern(
@@ -42,9 +55,10 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
   setNewPassword() {
     console.log(this.resetPasswordForm.value);
-    if (this.resetPasswordForm.invalid) {
+    if (this.resetPasswordForm.invalid || this.isLoading) {
       this.resetPasswordForm.markAllAsTouched();
     } else {
+      this.isLoading = true;
       console.log(this.resetPasswordForm.value);
       this._authApiService
         .resetPassword(this.resetPasswordForm.value)
@@ -52,13 +66,23 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (res) => {
             console.log(res);
+            this.isLoading = false;
             this._router.navigate(['/auth/login']);
           },
           error: (err) => {
             console.log(err);
+            this.isLoading = false;
           },
         });
     }
+  }
+
+  togglePassword() {
+    this.togglePasswordInput = !this.togglePasswordInput;
+  }
+
+  toggleRePassword() {
+    this.toggleRePasswordInput = !this.toggleRePasswordInput;
   }
   ngOnDestroy() {
     this.destroy$.next();

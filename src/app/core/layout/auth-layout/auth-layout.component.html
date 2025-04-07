@@ -1,4 +1,4 @@
-<div class="h-screen flex justify-center items-center">
+<div class="h-screen flex justify-center items-center relative">
   <div class="hidden auth__left__section md:block">
     <div class="w-[60%] mx-auto mt-10">
       <h1 class="text-[3.125rem] font-bold mb-8">
@@ -11,8 +11,24 @@
     </div>
   </div>
   <div class="auth__right__section">
-    <nav class="w-full font-inter">
-      <ul class="flex gap-12 justify-center md:justify-end items-center">
+    <button
+      id="toggleButton"
+      class="md:hidden text-main font-bold absolute top-10 right-10"
+      (click)="toggleNav()"
+    >
+      @if (!menuVisible) {
+      <i class="fa-solid fa-bars"></i>
+      }@else {
+      <i class="fa-solid fa-xmark"></i>
+      }
+    </button>
+    <nav
+      class="w-full font-inter transition-all duration-300 ease-in-out"
+      [ngClass]="{ hidden: !menuVisible, 'md:block': true }"
+    >
+      <ul
+        class="flex gap-6 justify-center md:justify-end items-center md:flex-row flex-col text-lg py-4 md:py-0 md:gap-12"
+      >
         <li class="">
           <select class="border-none" name="lang" id="">
             <option value="eng">English</option>
@@ -35,6 +51,7 @@
         </li>
       </ul>
     </nav>
+
     <div class="auth__containt">
       <router-outlet></router-outlet>
     </div>

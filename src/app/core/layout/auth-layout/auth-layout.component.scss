@@ -3,9 +3,9 @@
 }
 
 .auth__right__section {
-  @apply flex flex-col justify-start h-full w-1/2 p-8;
+  @apply flex flex-col justify-start h-full md:w-1/2  p-8 w-full;
 }
 
 .auth__containt {
-  @apply w-[60%] mx-auto flex-grow flex justify-center items-center;
+  @apply w-full mx-auto flex-grow flex justify-center items-center md:w-[60%] mt-12 sm:mt-0;
 }

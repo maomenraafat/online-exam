@@ -1,0 +1,7 @@
+.social-icons {
+  @media (min-width: 400px) {
+    flex-direction: row;
+    row-gap: 0px;
+    column-gap: 1.5rem;
+  }
+}

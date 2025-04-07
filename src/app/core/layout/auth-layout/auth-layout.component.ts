@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
-import { LoginComponent } from '../../pages/auth/login/login.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, NgClass],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.scss',
 })
-export class AuthLayoutComponent {}
+export class AuthLayoutComponent {
+  menuVisible: boolean = false;
+  toggleNav(): void {
+    this.menuVisible = !this.menuVisible;
+  }
+}

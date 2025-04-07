@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -16,6 +16,7 @@ import { SocialIconsComponent } from '../components/ui/social-icons/social-icons
 import { CustomInputComponent } from '../components/ui/custom-input/custom-input.component';
 import { jwtDecode } from 'jwt-decode';
 import { AsyncPipe } from '@angular/common';
+import { CustomBtnComponent } from '../../../../shared/components/ui/custom-btn/custom-btn.component';
 @Component({
   selector: 'app-login',
   imports: [
@@ -23,6 +24,7 @@ import { AsyncPipe } from '@angular/common';
     SocialIconsComponent,
     CustomInputComponent,
     ReactiveFormsModule,
+    CustomBtnComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -30,14 +32,14 @@ import { AsyncPipe } from '@angular/common';
 export class LoginComponent implements OnInit, OnDestroy {
   toggleInput: boolean = true;
   loginForm!: FormGroup;
+  isLoading: boolean = false;
   private readonly destroy$ = new Subject<void>();
-
+  private readonly _authApiService = inject(AuthApiService);
+  private readonly store = inject(Store<{ auth: TokenData }>);
+  private readonly _router = inject(Router);
   // userData$!: Observable<TokenData>;
 
-  constructor(
-    private _authApiService: AuthApiService,
-    private store: Store<{ auth: TokenData }>
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.initForm();
@@ -56,9 +58,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    if (this.loginForm.invalid) {
+    if (this.loginForm.invalid || this.isLoading) {
       this.loginForm.markAllAsTouched();
     } else {
+      this.isLoading = true;
       console.log(this.loginForm.value);
       this._authApiService
         .login(this.loginForm.value)
@@ -70,9 +73,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.store.dispatch(saveUser({ value: jwtDecode(res.token) }));
             // this.userData$ = this.store.select(authSelector);
             // console.log(this.userData$);
+            this.isLoading = false;
+            this._router.navigate(['/home']);
           },
           error: (err) => {
             console.log(err);
+            this.isLoading = false;
           },
         });
     }
