@@ -1,5 +1,7 @@
-<div class="flex justify-between bg-white rounded-[10px] py-4 px-6">
-  <div class="flex items-center gap-x-6">
+<div
+  class="flex justify-between flex-col md:flex-row bg-white rounded-[10px] py-4 px-6 gap-y-4"
+>
+  <div class="flex items-center gap-x-6 flex-col md:flex-row gap-y-4">
     <img src="images/Final Logo 1.png" alt="" />
     <div>
       <h3>{{ exam.title }}</h3>
@@ -8,11 +10,11 @@
   </div>
   <div class="flex flex-col justify-center items-center">
     <span class="mb-2">{{ exam.duration }} Minutes</span>
-    <a
+    <a class="block w-full"
       ><button
-        (click)="toggleModal()"
         (click)="handleId(exam._id)"
-        class="font-medium text-[12px] bg-main text-white py-1 px-6 rounded-[10px]"
+        (click)="toggleModal()"
+        class="font-medium text-[12px] bg-main text-white py-1 px-6 rounded-[10px] w-full"
       >
         Start
       </button></a
@@ -21,5 +23,5 @@
 </div>
 
 @if (showModal==true) {
-<app-modal (close)="showModal = false" (onStart)="handleStart()"></app-modal>
+<app-modal (close)="showModal = false"></app-modal>
 }

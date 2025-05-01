@@ -13,8 +13,33 @@
 
 .sidebar__item {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 2.25rem;
   padding: 0.5rem 0.75rem;
   border-radius: 10px;
   width: fit-content;
+}
+
+// _sidebar.scss
+
+.sidebar-hover-effect {
+  @apply transition-colors duration-300 ease-in-out;
+
+  &:hover {
+    @apply bg-main text-white;
+
+    .sidebar-icon,
+    .sidebar-text {
+      @apply text-white;
+    }
+  }
+}
+
+.sidebar-icon {
+  @apply text-main text-xl transition-all duration-300 ease-in-out;
+}
+
+.sidebar-text {
+  @apply transition-all duration-300 ease-in-out;
 }

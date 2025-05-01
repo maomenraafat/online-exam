@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QuizApiData, QuizApiRes } from '../../shared/interfaces/quiz-api-data';
+import { ExamApiData, ExamApiRes } from '../../shared/interfaces/exam-api-data';
+import { QuestionApiData } from '../../shared/interfaces/question-api-data';
 
 @Injectable({
   providedIn: 'root',
@@ -14,14 +16,14 @@ export class QuizAdaptorService {
       quizzes: data.subjects,
     };
   }
-  adaptExam(data: any): any {
+  adaptExam(data: ExamApiData): ExamApiRes {
     return {
       message: data.message,
       metadata: data.metadata,
       exams: data.exams,
     };
   }
-  adaptQuestion(data: any): any {
+  adaptQuestion(data: QuestionApiData): QuestionApiData {
     return {
       message: data.message,
       questions: data.questions,

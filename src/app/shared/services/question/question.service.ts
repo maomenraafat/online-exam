@@ -4,7 +4,7 @@ import { QuestionApiData } from '../../interfaces/question-api-data';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { QuizAdaptorService } from '../../../adaptors/quiz/quiz-adaptor.adaptor';
-import { Question } from '../../interfaces/question';
+import { Question, UserAnswer } from '../../interfaces/question';
 import { QuestionEndPoint } from '../../../enums/question.endPoints';
 
 @Injectable({
@@ -12,9 +12,12 @@ import { QuestionEndPoint } from '../../../enums/question.endPoints';
 })
 export class QuestionService {
   private _questionsList: WritableSignal<Question[]> = signal<Question[]>([]);
+
   questionsList = this._questionsList.asReadonly();
+  isLoadingQuestions: WritableSignal<boolean> = signal(true);
   _httpClient = inject(HttpClient);
   _quizAdaptorService = inject(QuizAdaptorService);
+
   constructor() {}
 
   getquestionsOnExams(id: string): Observable<QuestionApiData> {
@@ -33,6 +36,17 @@ export class QuestionService {
         })
       );
   }
+  checkQuestions(answers: UserAnswer[], time: number): Observable<UserAnswer> {
+    return this._httpClient.post<UserAnswer>(
+      `${environment.baseUrl}${QuestionEndPoint.checkQuestions}`,
+      { answers, time }
+    );
+  }
+
+  updateQuestions(questions: Question[]) {
+    this._questionsList.set(questions);
+  }
+
   clearQuestions() {
     this._questionsList.set([]);
   }

@@ -10,9 +10,15 @@ export interface Question {
   subject: Quiz;
   exam: Exam;
   createdAt: string;
+  userAnswer?: string;
 }
 
 export interface Answer {
   answer: string;
   key: string;
+}
+
+export interface UserAnswer {
+  questionId: string;
+  correct?: string;
 }

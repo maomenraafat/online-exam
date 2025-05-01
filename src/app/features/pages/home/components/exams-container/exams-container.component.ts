@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { QuizService } from '../../../../../shared/services/quiz/quiz.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ExamApiRes } from '../../../../../shared/interfaces/exam-api-data';
 import { Exam } from '../../../../../shared/interfaces/exam';
 import { ExamCardComponent } from '../../../../../shared/components/ui/exam-card/exam-card.component';
@@ -11,7 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-exams-container',
-  imports: [ExamCardComponent],
+  imports: [ExamCardComponent, RouterLink],
   templateUrl: './exams-container.component.html',
   styleUrl: './exams-container.component.scss',
 })
@@ -64,8 +64,7 @@ export class ExamsContainerComponent implements OnInit {
       });
   }
   getQuestionsByExam(examId: string) {
-    console.log(examId);
-    this.isLoading = true;
+    this._questionService.isLoadingQuestions.set(true);
     this.isError = false;
     this._questionService
       .getquestionsOnExams(examId)
@@ -74,16 +73,17 @@ export class ExamsContainerComponent implements OnInit {
         next: (res: QuestionApiData) => {
           console.log(res);
           this.questionsList = res.questions;
-          this.isLoading = false;
+          this._questionService.isLoadingQuestions.set(false);
         },
         error: (err) => {
           console.log(err);
-          this.isLoading = false;
+          this._questionService.isLoadingQuestions.set(false);
+
           this.isError = true;
         },
         complete: () => {
           console.log('complete');
-          this.isLoading = false;
+          this._questionService.isLoadingQuestions.set(false);
         },
       });
   }

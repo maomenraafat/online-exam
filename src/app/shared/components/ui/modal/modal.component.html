@@ -6,7 +6,78 @@
     class="bg-white rounded-[20px] w-full max-w-2xl mx-4 p-4"
     (click)="$event.stopPropagation()"
   >
-    @if(examstart){
+    @if (isLoadingQuestions) {
+    <div class="text-center py-16">
+      <div
+        class="inline-block animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-600 mb-4"
+      ></div>
+      <p class="text-gray-600">Loading Questions...</p>
+    </div>
+    } @else if (this.questionsList().length == 0) {
+    <div class="text-center py-16">
+      <div
+        class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8 text-blue-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-800 mb-2">
+        No questions available
+      </h3>
+      <p class="text-gray-600 mb-6">
+        There are currently no questions for this exam. Please check back later.
+      </p>
+    </div>
+    } @else if (showResults()) {
+    <div class="text-center p-6">
+      <h2 class="text-2xl font-bold mb-6 text-start">Your score</h2>
+
+      <div class="flex justify-evenly items-center mb-12">
+        <div class="chart-container">
+          <app-result-chart
+            [correctAnswers]="correctCount()"
+            [totalQuestions]="totalQuestions"
+          >
+          </app-result-chart>
+        </div>
+        <div class="">
+          <div class="text-[#02369C] flex justify-center items-center">
+            <p class="text-2xl">Correct</p>
+            <div class="text-3xl ms-[51px]">{{ correctCount() }}</div>
+          </div>
+          <div class="text-[#CC1010] flex justify-center items-center">
+            <p class="text-2xl">Incorrect</p>
+            <div class="text-3xl ms-[51px]">{{ incorrectCount() }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form__buttons flex gap-x-12">
+        <button
+          class="w-1/2 px-6 py-2 border border-main rounded-full text-main"
+        >
+          Back
+        </button>
+        <button
+          class="w-1/2 px-6 py-2 bg-main rounded-full hover:bg-blue-700 text-white"
+        >
+          Show results
+        </button>
+      </div>
+    </div>
+    } @else if(examstart){
     <div class="flex justify-between items-center p-4">
       <h3 class="text-xl font-medium">Instructions</h3>
     </div>
@@ -32,7 +103,7 @@
     </div>
     <div class="p-4">
       <button
-        (click)="onStart.emit()"
+        (click)="onStart.emit(); startExam()"
         class="bg-main text-white px-6 py-[10px] rounded-full hover:bg-blue-700 w-full"
       >
         Start
@@ -41,7 +112,6 @@
     }@else{
     <div class="mb-8">
       <div class="flex justify-between items-center mb-7">
-        <!-- Dynamic question counter -->
         <p class="text-main">
           Question {{ currentQuestion() }} of {{ questionsList().length }}
         </p>
@@ -53,8 +123,7 @@
         </div>
       </div>
 
-      <!-- Progress dots -->
-      <div class="flex gap-[6px] justify-between">
+      <div class="flex gap-2 sm:gap-5 md:gap-6 justify-center items-center">
         @for (dot of questionsList(); track $index) {
         <div
           class="w-2 h-2 rounded-full transition-colors duration-200"
@@ -71,13 +140,11 @@
       <div class="mb-6">
         <h4>{{ questionsList()[currentQuestion() - 1].question }}</h4>
       </div>
-
-      <!-- Answers -->
       <div class="space-y-3">
-        @for (answer of questionsList()[currentQuestion() - 1].answers; track
+        @for (answer of questionsList()[currentQuestion() - 1]?.answers; track
         answer.key) {
         <div
-          class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer transition-all duration-200"
+          class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer transition-all duration-200 break-all"
           [class.bg-[#EDEFF3]]="!isOptionSelected(answer.key)"
           [class.bg-[#CCD7EB]]="isOptionSelected(answer.key)"
           (click)="selectOption(answer.key)"
@@ -87,7 +154,7 @@
             [id]="'option' + answer.key"
             name="quizOption"
             class="w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500"
-            [checked]="selectedOption === answer.key"
+            [checked]="isOptionSelected(answer.key)"
           />
           <label [for]="'option' + answer.key" class="ml-3 text-gray-700">
             {{ answer.answer }}
@@ -107,13 +174,14 @@
         Back
       </button>
       <button
-        class="w-1/2 px-6 py-2 bg-[#1D1B201F] rounded-full bg-main text-white"
+        class="w-1/2 px-6 py-2 bg-[#1D1B201F] rounded-full hover:bg-blue-700 text-white"
         [class.opacity-50]="!selectedOption"
         [class.cursor-not-allowed]="!selectedOption"
         (click)="nextQuestion()"
         [disabled]="!selectedOption"
       >
-        {{ currentQuestion() === questionsList().length ? "Finish" : "Next" }}
+        @if (currentQuestion() === totalQuestions){ @if (isQuizComplete()) {
+        Finish } @else { Continue } } @else { Next }
       </button>
     </div>
     }

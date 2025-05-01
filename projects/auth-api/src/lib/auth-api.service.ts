@@ -80,4 +80,13 @@ export class AuthApiService implements AuthAPI {
         })
       );
   }
+
+  logout(): Observable<any> {
+    return this._httpClient.get(this._baseUrl + AuthEndPoint.LOGOUT).pipe(
+      map((res: any) => res),
+      catchError((err) => {
+        return throwError(() => this._authAPIAdaptorService.adaptError(err));
+      })
+    );
+  }
 }

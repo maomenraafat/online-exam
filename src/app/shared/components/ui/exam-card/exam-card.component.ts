@@ -12,7 +12,6 @@ import { Question } from '../../../interfaces/question';
 })
 export class ExamCardComponent {
   @Input() exam!: Exam;
-
   @Output() fireGetExamId: EventEmitter<string> = new EventEmitter();
   showModal = false;
 
@@ -23,5 +22,4 @@ export class ExamCardComponent {
     this.fireGetExamId.emit(id);
   }
 
-  handleStart() {}
 }

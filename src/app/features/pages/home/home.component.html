@@ -14,26 +14,42 @@
     <i class="fa-solid fa-magnifying-glass"></i
   ></span>
 </div>
-
+@if (menuVisible) {
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 z-20 sm:hidden"
+  (click)="toggleNav()"
+></div>
+}
 <aside
-  class="py-10 px-8 flex-shrink-0 hidden sm:block transition-all duration-300 ease-in-out"
-  [ngClass]="{ hidden: !menuVisible, 'md:block': true }"
+  class="py-10 px-8 flex-shrink-0 hidden sm:block transition-all duration-300 ease-in-out fixed top-[4rem] z-30 sm:bg-[#fbf9f9] bg-white w-full sm:w-auto sm:relative sm:top-0"
+  [class.block]="menuVisible"
+  [class.hidden]="!menuVisible"
 >
   <img src="images/Final Logo 1.png" alt="" />
-  <div class="sidebar__items mt-14 text-white font-poppins font-semibold">
+  <div class="sidebar__items mt-14 font-poppins font-semibold">
     <a [routerLink]="['/home']">
-      <div class="sidebar__item mb-8 bg-main cursor-pointer">
-        <img src="images/Vector.png" alt="" /><span>Dashboard</span>
-      </div></a
+      <div class="sidebar__item mb-8 bg-main text-white cursor-pointer">
+        <!-- <img src="images/Vector.png" alt="" /> -->
+        <span class="text-2xl"> <i class="fa-brands fa-elementor"></i></span>
+        <span>Dashboard</span>
+      </div>
+    </a>
+    <div
+      class="sidebar__item sidebar-hover-effect mb-14 text-[#696F79] cursor-pointer"
     >
-    <div class="sidebar__item mb-14 text-[#696F79] cursor-pointer">
-      <img src="images/Component 4.png" alt="" /><span>Quiz History</span>
+      <span class="sidebar-icon">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </span>
+      <span class="sidebar-text">Quiz History</span>
     </div>
     <div
-      class="sidebar__item text-[#696F79] cursor-pointer"
+      class="sidebar__item sidebar-hover-effect text-[#696F79] cursor-pointer"
       (click)="signOut()"
     >
-      <img src="images/ri_logout-box-fill.png" alt="" /><span>Log Out</span>
+      <span class="sidebar-icon">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </span>
+      <span class="sidebar-text">Log Out</span>
     </div>
   </div>
 </aside>
